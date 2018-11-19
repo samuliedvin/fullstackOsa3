@@ -1,0 +1,19 @@
+{
+  "name": "fullstackosa3",
+  "version": "1.0.0",
+  "description": "FullStack2018 kurssin osan 3 tehtävät",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "watch": "nodemon index.js",
+    "test": "test"
+  },
+  "author": "Samuli Virtanen",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.6"
+  }
+}
