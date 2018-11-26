@@ -12,13 +12,13 @@ mongoose.connect(url, {
     useNewUrlParser: true
 })
 
-const Number = mongoose.model('Number', {
+const Person = mongoose.model('Number', {
     name: String,
     number: String
 })
 
 if(process.argv.length === 2) {
-    Number
+    Person
     .find({})
         .then(result => {
             console.log('puhelinluettelo:')
@@ -28,11 +28,11 @@ if(process.argv.length === 2) {
         mongoose.connection.close()
     })
 } else if (process.argv.length === 4) {
-    const newNumber = new Number ({
+    const newPerson = new Person ({
         name: name,
         number: number
     })
-    newNumber
+    newPerson
         .save()
         .then(result => {
         console.log('Tietokantaan tallennettu numero ', name, number)
