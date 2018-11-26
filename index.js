@@ -13,37 +13,6 @@ app.use(morgan(':method :url :status :body :res[content-length] - :response-time
 
 morgan.token('body', function (req, res) { return JSON.stringify(req.body) })
 
-let persons = [
-    {
-        name: 'Arto Hellas',
-        number: '040-123456',
-        id: 1
-    },
-    {
-        name: 'Martti Tienari',
-        number: '040-123456',
-        id: 2
-    },
-    {
-        name: 'Arto Järvinen',
-        number: '040-123456',
-        id: 3
-    },
-    {
-        name: 'Lea Kutvonen',
-        number: '040-123456',
-        id: 4
-    }
-]
-
-const formatPerson = (person) => {
-    return {
-        name: person.name,
-        number: person.number,
-        id: person._id
-    }
-}
-  
 app.get('/', (req, res) => {
     res.send('<h1>Hello World!</h1>')
 })
@@ -62,7 +31,7 @@ app.get('/api/persons', (req, res) => {
     Person
     .find({})
     .then(persons => {
-        res.json(persons.map(formatPerson))
+        res.json(persons.map(Person.format))
     })    
 })
 
@@ -92,18 +61,26 @@ app.post('/api/persons', (request, response) => {
     if(!body.number) {
         return response.status(400).json({error: 'number missing'})
     }
-    if(persons.find(person => person.name === body.name)) {
-        return response.status(400).json({error: 'name must be unique'})
-    }
 
-    const person = {
+    // Old way of finding duplicate is getting me errors so lets comment it out.
+
+    // if(persons.find(person => person.name === body.name)) {
+    //     return response.status(400).json({error: 'name must be unique'})
+    // }
+
+    const person = new Person({
         name: body.name,
         number: body.number,
-        id: Math.floor(Math.random()*1000000)
-    }
+    })
 
-    persons = persons.concat(person)
-    response.json(person)
+    person
+        .save()
+        .then(savedPerson => {
+            response.json(Person.format(savedPerson))
+        })
+        .catch(error => {
+            console.log(error)
+        })
 })
 
 const PORT = process.env.PORT || 3001
