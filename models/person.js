@@ -1,8 +1,11 @@
 const mongoose = require('mongoose')
+
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config()
+}
+
 const Schema = mongoose.Schema;
-const USER = 'xx'
-const PASS = 'xx'
-const url = `mongodb://${USER}:${PASS}@ds115434.mlab.com:15434/fullstack2018`
+const url = process.env.MONGODB_URI
 
 const numberSchema = new Schema({
     name: String,

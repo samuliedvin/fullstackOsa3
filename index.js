@@ -86,13 +86,21 @@ app.post('/api/persons', (request, response) => {
         number: body.number,
     })
 
-    person
-        .save()
-        .then(savedPerson => {
-            response.json(Person.format(savedPerson))
-        })
-        .catch(error => {
-            console.log(error)
+    Person
+        .find({name: body.name})
+        .then(result => {
+            if (result.length === 0) {
+                person
+                    .save()
+                    .then(savedPerson => {
+                        response.json(Person.format(savedPerson))
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+            } else {
+                response.status(400).json({error: 'Name already in the database'})
+            }
         })
 })
 
