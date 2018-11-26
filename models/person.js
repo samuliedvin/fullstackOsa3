@@ -4,7 +4,7 @@ if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config()
 }
 
-const Schema = mongoose.Schema;
+const Schema = mongoose.Schema
 const url = process.env.MONGODB_URI
 
 const numberSchema = new Schema({

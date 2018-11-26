@@ -19,65 +19,65 @@ app.get('/', (req, res) => {
 
 app.get('/info', (req, res) => {
     Person
-    .find({})
-    .then(persons => {
-        let personCount = persons.length
-        let date = new Date()
-        let result = `
-        <p>puhelinluettelossa ${personCount} henkilön tiedot<p>
-        <p>${date}</p>
-        `
-        res.send(result)
-    })    
+        .find({})
+        .then(persons => {
+            let personCount = persons.length
+            let date = new Date()
+            let result = `
+            <p>puhelinluettelossa ${personCount} henkilön tiedot<p>
+            <p>${date}</p>
+            `
+            res.send(result)
+        })
 })
 
 app.get('/api/persons', (req, res) => {
     Person
-    .find({})
-    .then(persons => {
-        res.json(persons.map(Person.format))
-    })    
+        .find({})
+        .then(persons => {
+            res.json(persons.map(Person.format))
+        })
 })
 
 app.get('/api/persons/:id', (request, response) => {
     Person
-    .findById(request.params.id)
-    .then(person => {
-      if (person) {
-        response.json(Person.format(person))
-      } else {
-        response.status(404).end()
-      }
-    })
-    .catch(error => {
-      console.log(error)
-      response.status(400).send({ error: 'malformatted id' })
-    })
+        .findById(request.params.id)
+        .then(person => {
+            if (person) {
+                response.json(Person.format(person))
+            } else {
+                response.status(404).end()
+            }
+        })
+        .catch(error => {
+            console.log(error)
+            response.status(400).send({ error: 'malformatted id' })
+        })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
     Person
-    .findByIdAndRemove(request.params.id)
-    .then(result => {
-      response.status(204).end()
-    })
-    .catch(error => {
-      response.status(400).send({ error: 'malformatted id' })
-    })
+        .findByIdAndRemove(request.params.id)
+        .then(() => {
+            response.status(204).end()
+        })
+        .catch(() => {
+            response.status(400).send({ error: 'malformatted id' })
+        })
 })
 
 app.post('/api/persons', (request, response) => {
     const body = request.body
     if(!body.name) {
-        return response.status(400).json({error: 'name missing'})
+        return response.status(400).json({ error: 'name missing' })
     }
     if(!body.number) {
-        return response.status(400).json({error: 'number missing'})
+        return response.status(400).json({ error: 'number missing' })
     }
 
     // Old way of finding duplicate is getting me errors so lets comment it out.
 
-    // if(persons.find(person => person.name === body.name)) {
+    // if(persons.find(person => person.name === body.name)){
     //     return response.status(400).json({error: 'name must be unique'})
     // }
 
@@ -87,7 +87,7 @@ app.post('/api/persons', (request, response) => {
     })
 
     Person
-        .find({name: body.name})
+        .find({ name: body.name })
         .then(result => {
             if (result.length === 0) {
                 person
@@ -99,7 +99,7 @@ app.post('/api/persons', (request, response) => {
                         console.log(error)
                     })
             } else {
-                response.status(400).json({error: 'Name already in the database'})
+                response.status(400).json({ error: 'Name already in the database' })
             }
         })
 })
@@ -124,5 +124,5 @@ app.put('/api/persons/:id', (request, response) => {
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+    console.log(`Server running on port ${PORT}`)
 })
